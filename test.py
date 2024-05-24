@@ -10,7 +10,7 @@ from constants import MENU_COLOUR
 pygame.font.init()
 
 window = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Client")
+pygame.display.set_caption("Test Client")
 
 
 class Target:
@@ -62,6 +62,7 @@ class Button:
         else:
             print("How'd you miss")
             return False
+
 
 targets = []
 def redrawWindow(window, game, p):
@@ -150,6 +151,7 @@ def main():
 
     while run:
         clock.tick(FPS)
+        counter += 1
         try:
             game = n.send("get")
         except:
@@ -190,16 +192,20 @@ def main():
                 for target in targets:
                     if target.click(pos) and game.connected():
                         targets.remove(target)
+                        counterseconds = 0
                         if player == 0:
                             if not game.p1Went:
                                 n.send(target.text)
                         else:
                             if not game.p2Went:
                                 n.send(target.text)
-        counter += 1
+
         if counter % FPS == 0:
             counterseconds += 1
-            print(counterseconds)
+            if counterseconds % 5 == 0:
+                for target in targets:
+                    targets.remove(target)
+                    print("You took too long")
         redrawWindow(window, game, player)
 
 
