@@ -8,7 +8,7 @@ class Network:
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server = SERVER_IP
         self.port = PORT
-        self.addr = (self.server, self.port)
+        self.address = (self.server, self.port)
         self.p = self.connect()
 
     def getP(self):
@@ -16,7 +16,7 @@ class Network:
 
     def connect(self):
         try:
-            self.client.connect(self.addr)
+            self.client.connect(self.address)
             return self.client.recv(2048).decode()
         except:
             pass
