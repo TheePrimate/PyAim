@@ -15,7 +15,7 @@ pygame.display.set_caption("Client")
 
 class Target:
     def __init__(self):
-        self.text = "Hit Me!"
+        self.text = "Please Hit Me!"
         self.radius = 50
         self.x = random.randint(self.radius, WIDTH - self.radius)
         self.y = random.randint(self.radius, HEIGHT - self.radius)
