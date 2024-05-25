@@ -5,14 +5,14 @@ from game import Game
 from constants import SERVER_IP
 from constants import PORT
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 try:
-    s.bind((SERVER_IP, PORT))
+    socket.bind((SERVER_IP, PORT))
 except socket.error as e:
     str(e)
 
-s.listen(2)
+socket.listen(2)
 print("Waiting for a connection, Server Started")
 
 connected = set()
@@ -24,7 +24,6 @@ def threaded_client(conn, p, gameId):
     global idCount
     conn.send(str.encode(str(p)))
 
-    reply = ""
     while True:
         try:
             data = conn.recv(4096).decode()
@@ -58,7 +57,7 @@ def threaded_client(conn, p, gameId):
 
 
 while True:
-    conn, addr = s.accept()
+    conn, addr = socket.accept()
     print("Connected to:", addr)
 
     idCount += 1

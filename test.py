@@ -17,8 +17,8 @@ class Target:
     def __init__(self):
         self.text = "Hit Me!"
         self.radius = 50
-        self.x = random.randint(self.radius + self.radius / 2, WIDTH - self.radius)
-        self.y = random.randint(self.radius + self.radius / 2, HEIGHT - self.radius)
+        self.x = random.randint(self.radius + int(self.radius / 2), WIDTH - self.radius)
+        self.y = random.randint(self.radius + int(self.radius / 2), HEIGHT - self.radius)
         self.color = (random.randint(0,255), random.randint(0, 255), random.randint(0, 255))
 
     def draw(self, window):
@@ -31,11 +31,10 @@ class Target:
         x1 = pos[0]
         y1 = pos[1]
         if ((x1 - self.x) ** 2 + (y1 - self.y) ** 2)**0.5 <= self.radius:
-            print("hit")
             return True
         else:
-            print("miss")
             return False
+
 
 class Button:
     def __init__(self):
@@ -57,14 +56,16 @@ class Button:
         x2 = pos[0]
         y2 = pos[1]
         if self.x <= x2 <= self.x + self.width and self.y <= y2 <= self.y + self.height:
-            print("Start")
+            print("Game start")
             return True
         else:
-            print("How'd you miss")
+            print("How'd you miss... maybe... don't play this game")
             return False
 
 
 targets = []
+
+
 def redrawWindow(window, game, p):
     window.fill(BACKGROUND_COLOUR)
 
@@ -146,9 +147,12 @@ def main():
     clock = pygame.time.Clock()
     n = Network()
     player = int(n.getP())
-    print("You are player", player + 1)
+    print("You are Player", player + 1)
     counter = 0
-    counter_seconds= 0
+    counter_seconds = 0
+    points_hit = 0
+    points_missed = 0
+    points_late = 0
 
     while run:
         clock.tick(FPS)
@@ -194,19 +198,25 @@ def main():
                     if target.click(pos) and game.connected():
                         counter_seconds = 0
                         targets.remove(target)
+                        points_hit += 1
+                        print("You have hit:", points_hit, "times")
                         if player == 0:
                             if not game.p1Went:
                                 n.send(target.text)
                         else:
                             if not game.p2Went:
                                 n.send(target.text)
+                    if target.click(pos) is False and game.connected():
+                        points_missed += 1
+                        print("You have missed:", points_missed, "times")
 
         if counter % FPS == 0:
             counter_seconds += 1
             if counter_seconds % 2 == 0:
                 for target in targets:
                     targets.remove(target)
-                    print("Too Late...")
+                    points_late += 1
+                    print("Too Late...\n", "You have missed:", points_late, "times")
         redrawWindow(window, game, player)
 
 
