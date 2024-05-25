@@ -171,7 +171,7 @@ def main():
 
         if game.bothWent():
             redrawWindow(window, game, player)
-            pygame.time.delay(500)
+            pygame.time.delay(5000)
             try:
                 game = n.send("reset")
                 points_missed = 0
