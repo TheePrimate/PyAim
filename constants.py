@@ -1,8 +1,9 @@
 Home_Dad_IP = "192.168.3.122"
+Home_Mom_IP = "192.168.0.109"
 School_IP = "172.23.4.31"
 WIDTH = 1500
 HEIGHT = 1000
-SERVER_IP = Home_Dad_IP
+SERVER_IP = Home_Mom_IP
 PORT = 5555
 FPS = 60
 MENU_COLOUR = (0, 125, 125)

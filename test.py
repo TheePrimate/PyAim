@@ -17,8 +17,8 @@ class Target:
     def __init__(self):
         self.text = "Hit Me!"
         self.radius = 50
-        self.x = random.randint(self.radius, WIDTH - self.radius)
-        self.y = random.randint(self.radius, HEIGHT - self.radius)
+        self.x = random.randint(self.radius + self.radius / 2, WIDTH - self.radius)
+        self.y = random.randint(self.radius + self.radius / 2, HEIGHT - self.radius)
         self.color = (random.randint(0,255), random.randint(0, 255), random.randint(0, 255))
 
     def draw(self, window):
@@ -140,6 +140,7 @@ def menu_screen():
 
     main()
 
+
 def main():
     run = True
     clock = pygame.time.Clock()
@@ -147,7 +148,7 @@ def main():
     player = int(n.getP())
     print("You are player", player + 1)
     counter = 0
-    counterseconds= 0
+    counter_seconds= 0
 
     while run:
         clock.tick(FPS)
@@ -191,8 +192,8 @@ def main():
 
                 for target in targets:
                     if target.click(pos) and game.connected():
+                        counter_seconds = 0
                         targets.remove(target)
-                        counterseconds = 0
                         if player == 0:
                             if not game.p1Went:
                                 n.send(target.text)
@@ -201,13 +202,12 @@ def main():
                                 n.send(target.text)
 
         if counter % FPS == 0:
-            counterseconds += 1
-            if counterseconds % 5 == 0:
+            counter_seconds += 1
+            if counter_seconds % 2 == 0:
                 for target in targets:
                     targets.remove(target)
-                    print("You took too long")
+                    print("Too Late...")
         redrawWindow(window, game, player)
-
 
 
 while True:

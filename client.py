@@ -10,15 +10,15 @@ from constants import MENU_COLOUR
 pygame.font.init()
 
 window = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Client")
+pygame.display.set_caption("Test Client")
 
 
 class Target:
     def __init__(self):
         self.text = "Hit Me!"
         self.radius = 50
-        self.x = random.randint(self.radius, WIDTH - self.radius)
-        self.y = random.randint(self.radius, HEIGHT - self.radius)
+        self.x = random.randint(self.radius + self.radius / 2, WIDTH - self.radius)
+        self.y = random.randint(self.radius + self.radius / 2, HEIGHT - self.radius)
         self.color = (random.randint(0,255), random.randint(0, 255), random.randint(0, 255))
 
     def draw(self, window):
@@ -62,6 +62,7 @@ class Button:
         else:
             print("How'd you miss")
             return False
+
 
 targets = []
 def redrawWindow(window, game, p):
@@ -139,17 +140,19 @@ def menu_screen():
 
     main()
 
+
 def main():
     run = True
     clock = pygame.time.Clock()
     n = Network()
     player = int(n.getP())
     print("You are player", player + 1)
-    circle_clear_event = pygame.USEREVENT
-    pygame.time.set_timer(circle_clear_event, 4000)
+    counter = 0
+    counter_seconds= 0
 
     while run:
         clock.tick(FPS)
+        counter += 1
         try:
             game = n.send("get")
         except:
@@ -180,10 +183,6 @@ def main():
             pygame.time.delay(2000)
 
         for event in pygame.event.get():
-            if event.type == circle_clear_event:
-                for target in targets:
-                    targets.remove(target)
-                    print("Too late...")
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
@@ -193,6 +192,7 @@ def main():
 
                 for target in targets:
                     if target.click(pos) and game.connected():
+                        counter_seconds = 0
                         targets.remove(target)
                         if player == 0:
                             if not game.p1Went:
@@ -201,9 +201,13 @@ def main():
                             if not game.p2Went:
                                 n.send(target.text)
 
-
+        if counter % FPS == 0:
+            counter_seconds += 1
+            if counter_seconds % 2 == 0:
+                for target in targets:
+                    targets.remove(target)
+                    print("Too Late...")
         redrawWindow(window, game, player)
-
 
 
 while True:
