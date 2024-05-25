@@ -30,11 +30,15 @@ class Game:
 
     def winner(self):
 
-        p1 = self.moves[0].upper()[0]
-        p2 = self.moves[1].upper()[0]
+        p1 = int(self.moves[0])
+        p2 = int(self.moves[1])
 
-        winner = -1
-
+        if p1 > p2:
+            winner = 0
+        elif p2 < p2:
+            winner = 1
+        else:
+            winner = -1
 
         return winner
 

@@ -77,26 +77,26 @@ def redrawWindow(window, game, p):
     else:
         font = pygame.font.SysFont("Times New Roman", 60)
         text = font.render("Your Move", 1, (0, 255,255))
-        window.blit(text, (80, 200))
+        window.blit(text, (WIDTH / 3, HEIGHT / 2))
 
         text = font.render("Opponents", 1, (0, 255, 255))
-        window.blit(text, (380, 200))
+        window.blit(text, (WIDTH / 4, HEIGHT / 2))
 
         move1 = game.get_player_move(0)
         move2 = game.get_player_move(1)
         if game.bothWent():
-            text1 = font.render(move1, 1, (0,0,0))
+            text1 = font.render(move1, 1, (0, 0, 0))
             text2 = font.render(move2, 1, (0, 0, 0))
         else:
             if game.p1Went and p == 0:
-                text1 = font.render(move1, 1, (0,0,0))
+                text1 = font.render(f"Hit: {move1} times", 1, (0, 0, 0))
             elif game.p1Went:
                 text1 = font.render("Locked In", 1, (0, 0, 0))
             else:
                 text1 = font.render("Waiting...", 1, (0, 0, 0))
 
             if game.p2Went and p == 1:
-                text2 = font.render(move2, 1, (0,0,0))
+                text2 = font.render(f"Hit {move2} times", 1, (0,0,0))
             elif game.p2Went:
                 text2 = font.render("Locked In", 1, (0, 0, 0))
             else:
@@ -148,15 +148,16 @@ def main():
     n = Network()
     player = int(n.getP())
     print("You are Player", player + 1)
-    counter = 0
-    counter_seconds = 0
+    frame_counter = 0
+    general_counter_seconds = 0
+    late_counter_seconds = 0
     points_hit = 0
     points_missed = 0
     points_late = 0
 
     while run:
         clock.tick(FPS)
-        counter += 1
+        frame_counter += 1
         try:
             game = n.send("get")
         except:
@@ -169,6 +170,10 @@ def main():
             pygame.time.delay(500)
             try:
                 game = n.send("reset")
+                points_missed = 0
+                points_hit = 0
+                points_late = 0
+                general_counter_seconds = 0
             except:
                 run = False
                 print("Couldn't get game")
@@ -176,9 +181,9 @@ def main():
 
             font = pygame.font.SysFont("Times New Roman", 90)
             if (game.winner() == 1 and player == 1) or (game.winner() == 0 and player == 0):
-                text = font.render("You Won!", 1, (255,0,0))
+                text = font.render("You Won!", 1, (255, 0, 0))
             elif game.winner() == -1:
-                text = font.render("Tie Game!", 1, (255,0,0))
+                text = font.render("Tie Game!", 1, (255, 0, 0))
             else:
                 text = font.render("You Lost...", 1, (255, 0, 0))
 
@@ -196,23 +201,24 @@ def main():
 
                 for target in targets:
                     if target.click(pos) and game.connected():
-                        counter_seconds = 0
+                        late_counter_seconds = 0
                         targets.remove(target)
                         points_hit += 1
                         print("You have hit:", points_hit, "times")
                         if player == 0:
-                            if not game.p1Went:
-                                n.send(target.text)
+                            if not game.p1Went and general_counter_seconds > 10:
+                                n.send(str(points_hit))
                         else:
-                            if not game.p2Went:
-                                n.send(target.text)
+                            if not game.p2Went and general_counter_seconds > 10:
+                                n.send(str(points_hit))
                     if target.click(pos) is False and game.connected():
                         points_missed += 1
                         print("You have missed:", points_missed, "times")
 
-        if counter % FPS == 0:
-            counter_seconds += 1
-            if counter_seconds % 2 == 0:
+        if frame_counter % FPS == 0:
+            late_counter_seconds += 1
+            general_counter_seconds += 1
+            if late_counter_seconds % 2 == 0:
                 for target in targets:
                     targets.remove(target)
                     points_late += 1
