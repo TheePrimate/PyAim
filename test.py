@@ -9,6 +9,7 @@ from constants import BACKGROUND_COLOUR
 from constants import MENU_COLOUR
 from constants import TEXT_IN_MAIN_X1
 from constants import TEXT_IN_MAIN_X2
+from constants import TEXT_IN_MAIN_Y
 pygame.font.init()
 
 window = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -79,10 +80,10 @@ def redrawWindow(window, game, p):
     else:
         font = pygame.font.SysFont("Times New Roman", 60)
         text = font.render("Your Move", 1, (0, 255,255))
-        window.blit(text, (TEXT_IN_MAIN_X1 - text.get_width() / 2, HEIGHT * 0.1))
+        window.blit(text, (TEXT_IN_MAIN_X1 - text.get_width() / 2, TEXT_IN_MAIN_Y))
 
         text = font.render("Opponents", 1, (0, 255, 255))
-        window.blit(text, (TEXT_IN_MAIN_X2 - text.get_width() / 2, HEIGHT * 0.1))
+        window.blit(text, (TEXT_IN_MAIN_X2 - text.get_width() / 2, TEXT_IN_MAIN_Y))
 
         move1 = game.get_player_move(0)
         move2 = game.get_player_move(1)
@@ -105,11 +106,11 @@ def redrawWindow(window, game, p):
                 text2 = font.render("Waiting...", 1, (0, 0, 0))
 
         if p == 0:
-            window.blit(text1, (TEXT_IN_MAIN_X1 - text.get_width() / 2, HEIGHT * 0.5))
-            window.blit(text2, (TEXT_IN_MAIN_X2 - text.get_width() / 2, HEIGHT * 0.5))
+            window.blit(text1, (TEXT_IN_MAIN_X1 - text.get_width() / 2, TEXT_IN_MAIN_Y * 1.5))
+            window.blit(text2, (TEXT_IN_MAIN_X2 - text.get_width() / 2, TEXT_IN_MAIN_Y * 1.5))
         if p == 1:
-            window.blit(text2, (TEXT_IN_MAIN_X1 - text.get_width() / 2, HEIGHT * 0.5))
-            window.blit(text1, (TEXT_IN_MAIN_X2 - text.get_width() / 2, HEIGHT * 0.5))
+            window.blit(text2, (TEXT_IN_MAIN_X1 - text.get_width() / 2, TEXT_IN_MAIN_Y * 1.5))
+            window.blit(text1, (TEXT_IN_MAIN_X2 - text.get_width() / 2, TEXT_IN_MAIN_Y * 1.5))
 
 
         target_sprite = Target()
