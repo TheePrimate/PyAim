@@ -3,6 +3,7 @@ import pickle
 from constants import SERVER_IP
 from constants import PORT
 
+
 class Network:
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

@@ -99,7 +99,7 @@ def redrawWindow(window, game, p):
                 text1 = font.render("Waiting...", 1, (0, 0, 0))
 
             if game.p2Went and p == 1:
-                text2 = font.render(f"Hit {move2} times", 1, (0, 0, 0))
+                text2 = font.render(f"Hit: {move2} times", 1, (0, 0, 0))
             elif game.p2Went:
                 text2 = font.render("Locked In", 1, (0, 0, 0))
             else:
@@ -111,7 +111,6 @@ def redrawWindow(window, game, p):
         if p == 1:
             window.blit(text2, (TEXT_IN_MAIN_X1 - text.get_width() / 2, TEXT_IN_MAIN_Y * 1.5))
             window.blit(text1, (TEXT_IN_MAIN_X2 - text.get_width() / 2, TEXT_IN_MAIN_Y * 1.5))
-
 
         target_sprite = Target()
 
