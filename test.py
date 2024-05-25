@@ -7,6 +7,8 @@ from constants import HEIGHT
 from constants import FPS
 from constants import BACKGROUND_COLOUR
 from constants import MENU_COLOUR
+from constants import TEXT_IN_MAIN_X1
+from constants import TEXT_IN_MAIN_X2
 pygame.font.init()
 
 window = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -72,15 +74,15 @@ def redrawWindow(window, game, p):
     if not(game.connected()):
         font = pygame.font.SysFont("Times No Roman", 80)
         text = font.render("Waiting for Another Client to Connect...", 1, (255,0,0))
-        window.blit(text, (WIDTH/2 - text.get_width()/2, HEIGHT/2 - text.get_height()/2))
+        window.blit(text, (WIDTH/2 - text.get_width() / 2, HEIGHT/2 - text.get_height() / 2))
 
     else:
         font = pygame.font.SysFont("Times New Roman", 60)
         text = font.render("Your Move", 1, (0, 255,255))
-        window.blit(text, (WIDTH / 3, HEIGHT / 2))
+        window.blit(text, (TEXT_IN_MAIN_X1 - text.get_width() / 2, HEIGHT * 0.1))
 
         text = font.render("Opponents", 1, (0, 255, 255))
-        window.blit(text, (WIDTH / 4, HEIGHT / 2))
+        window.blit(text, (TEXT_IN_MAIN_X2 - text.get_width() / 2, HEIGHT * 0.1))
 
         move1 = game.get_player_move(0)
         move2 = game.get_player_move(1)
@@ -96,18 +98,19 @@ def redrawWindow(window, game, p):
                 text1 = font.render("Waiting...", 1, (0, 0, 0))
 
             if game.p2Went and p == 1:
-                text2 = font.render(f"Hit {move2} times", 1, (0,0,0))
+                text2 = font.render(f"Hit {move2} times", 1, (0, 0, 0))
             elif game.p2Went:
                 text2 = font.render("Locked In", 1, (0, 0, 0))
             else:
                 text2 = font.render("Waiting...", 1, (0, 0, 0))
 
+        if p == 0:
+            window.blit(text1, (TEXT_IN_MAIN_X1 - text.get_width() / 2, HEIGHT * 0.5))
+            window.blit(text2, (TEXT_IN_MAIN_X2 - text.get_width() / 2, HEIGHT * 0.5))
         if p == 1:
-            window.blit(text2, (100, 350))
-            window.blit(text1, (400, 350))
-        else:
-            window.blit(text1, (100, 350))
-            window.blit(text2, (400, 350))
+            window.blit(text2, (TEXT_IN_MAIN_X1 - text.get_width() / 2, HEIGHT * 0.5))
+            window.blit(text1, (TEXT_IN_MAIN_X2 - text.get_width() / 2, HEIGHT * 0.5))
+
 
         target_sprite = Target()
 
@@ -117,6 +120,7 @@ def redrawWindow(window, game, p):
             target.draw(window)
 
     pygame.display.update()
+
 
 def menu_screen():
     run = True
