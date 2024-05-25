@@ -35,7 +35,7 @@ class Game:
 
         if p1 > p2:
             winner = 0
-        elif p2 < p2:
+        elif p1 < p2:
             winner = 1
         else:
             winner = -1
