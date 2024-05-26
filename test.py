@@ -10,6 +10,7 @@ from constants import MENU_COLOUR
 from constants import TEXT_IN_MAIN_X1
 from constants import TEXT_IN_MAIN_X2
 from constants import TEXT_IN_MAIN_Y
+from constants import PLAY_TIME
 pygame.font.init()
 
 window = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -204,20 +205,23 @@ def main():
                 pos = pygame.mouse.get_pos()
 
                 for target in targets:
-                    if target.click(pos) and game.connected():
+                    if target.click(pos):
                         late_counter_seconds = 0
                         targets.remove(target)
                         points_hit += 1
                         print("You have hit:", points_hit, "times")
-                    if target.click(pos) is False and game.connected():
+                    if target.click(pos) is False:
                         points_missed += 1
                         print("You have missed:", points_missed, "times")
-        if player == 0:
-            if not game.p1Went and general_counter_seconds > 10:
-                n.send(str(points_hit))
-        else:
-            if not game.p2Went and general_counter_seconds > 10:
-                n.send(str(points_hit))
+
+        if general_counter_seconds >= PLAY_TIME:
+            if player == 0:
+                # If false (turn has not passed)... send data
+                if not game.p1Went:
+                    n.send(str(points_hit))
+            else:
+                if not game.p2Went:
+                    n.send(str(points_hit))
 
         if frame_counter % FPS == 0:
             late_counter_seconds += 1
@@ -226,7 +230,7 @@ def main():
                 for target in targets:
                     targets.remove(target)
                     points_late += 1
-                    print("Too Late...\n", "You have missed:", points_late, "times")
+                    print("Too Late...\n", "You were late", points_late, "times")
         redrawWindow(window, game, player)
 
 
