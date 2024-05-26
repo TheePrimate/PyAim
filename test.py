@@ -209,15 +209,15 @@ def main():
                         targets.remove(target)
                         points_hit += 1
                         print("You have hit:", points_hit, "times")
-                        if player == 0:
-                            if not game.p1Went and general_counter_seconds > 10:
-                                n.send(str(points_hit))
-                        else:
-                            if not game.p2Went and general_counter_seconds > 10:
-                                n.send(str(points_hit))
                     if target.click(pos) is False and game.connected():
                         points_missed += 1
                         print("You have missed:", points_missed, "times")
+        if player == 0:
+            if not game.p1Went and general_counter_seconds > 10:
+                n.send(str(points_hit))
+        else:
+            if not game.p2Went and general_counter_seconds > 10:
+                n.send(str(points_hit))
 
         if frame_counter % FPS == 0:
             late_counter_seconds += 1
