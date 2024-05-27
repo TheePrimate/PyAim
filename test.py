@@ -11,6 +11,9 @@ from constants import TEXT_IN_MAIN_X1
 from constants import TEXT_IN_MAIN_X2
 from constants import TEXT_IN_MAIN_Y
 from constants import PLAY_TIME
+from constants import HIT_VALUE
+from constants import MISS_VALUE
+from constants import LATE_VALUE
 pygame.font.init()
 
 window = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -159,6 +162,7 @@ def main():
     points_hit = 0
     points_missed = 0
     points_late = 0
+    score = 0
 
     while run:
         clock.tick(FPS)
@@ -214,15 +218,6 @@ def main():
                         points_missed += 1
                         print("You have missed:", points_missed, "times")
 
-        if general_counter_seconds >= PLAY_TIME:
-            if player == 0:
-                # If false (turn has not passed)... send data
-                if not game.p1Went:
-                    n.send(str(points_hit))
-            else:
-                if not game.p2Went:
-                    n.send(str(points_hit))
-
         if frame_counter % FPS == 0:
             late_counter_seconds += 1
             general_counter_seconds += 1
@@ -231,6 +226,16 @@ def main():
                     targets.remove(target)
                     points_late += 1
                     print("Too Late...\n", "You were late", points_late, "times")
+
+        if general_counter_seconds >= PLAY_TIME:
+            score = HIT_VALUE * points_hit + MISS_VALUE * points_missed + LATE_VALUE * points_late
+            if player == 0:
+                # If false (turn has not passed)... send data
+                if not game.p1Went:
+                    n.send(str(score))
+            else:
+                if not game.p2Went:
+                    n.send(str(score))
         redrawWindow(window, game, player)
 
 
