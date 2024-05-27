@@ -23,7 +23,7 @@ class Game:
         """
         return self.misses[p]
 
-    def play(self, player, hit):
+    def play(self, player, hit, miss):
         self.hits[player] = hit
         self.misses[player] = miss
         if player == 0:
