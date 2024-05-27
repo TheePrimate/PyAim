@@ -9,10 +9,12 @@ from constants import BACKGROUND_COLOUR
 from constants import MENU_COLOUR
 from constants import TEXT_IN_MAIN_X1
 from constants import TEXT_IN_MAIN_X2
+from constants import TEXT_IN_MAIN_Y
+from constants import PLAY_TIME
 pygame.font.init()
 
 window = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Client")
+pygame.display.set_caption("Test Client")
 
 
 class Target:
@@ -79,10 +81,10 @@ def redrawWindow(window, game, p):
     else:
         font = pygame.font.SysFont("Times New Roman", 60)
         text = font.render("Your Move", 1, (0, 255,255))
-        window.blit(text, (TEXT_IN_MAIN_X1 - text.get_width() / 2, HEIGHT * 0.1))
+        window.blit(text, (TEXT_IN_MAIN_X1 - text.get_width() / 2, TEXT_IN_MAIN_Y))
 
         text = font.render("Opponents", 1, (0, 255, 255))
-        window.blit(text, (TEXT_IN_MAIN_X2 - text.get_width() / 2, HEIGHT * 0.1))
+        window.blit(text, (TEXT_IN_MAIN_X2 - text.get_width() / 2, TEXT_IN_MAIN_Y))
 
         move1 = game.get_player_move(0)
         move2 = game.get_player_move(1)
@@ -98,19 +100,18 @@ def redrawWindow(window, game, p):
                 text1 = font.render("Waiting...", 1, (0, 0, 0))
 
             if game.p2Went and p == 1:
-                text2 = font.render(f"Hit {move2} times", 1, (0, 0, 0))
+                text2 = font.render(f"Hit: {move2} times", 1, (0, 0, 0))
             elif game.p2Went:
                 text2 = font.render("Locked In", 1, (0, 0, 0))
             else:
                 text2 = font.render("Waiting...", 1, (0, 0, 0))
 
         if p == 0:
-            window.blit(text1, (TEXT_IN_MAIN_X1 - text.get_width() / 2, HEIGHT * 0.5))
-            window.blit(text2, (TEXT_IN_MAIN_X2 - text.get_width() / 2, HEIGHT * 0.5))
+            window.blit(text1, (TEXT_IN_MAIN_X1 - text.get_width() / 2, TEXT_IN_MAIN_Y * 1.5))
+            window.blit(text2, (TEXT_IN_MAIN_X2 - text.get_width() / 2, TEXT_IN_MAIN_Y * 1.5))
         if p == 1:
-            window.blit(text2, (TEXT_IN_MAIN_X1 - text.get_width() / 2, HEIGHT * 0.5))
-            window.blit(text1, (TEXT_IN_MAIN_X2 - text.get_width() / 2, HEIGHT * 0.5))
-
+            window.blit(text2, (TEXT_IN_MAIN_X1 - text.get_width() / 2, TEXT_IN_MAIN_Y * 1.5))
+            window.blit(text1, (TEXT_IN_MAIN_X2 - text.get_width() / 2, TEXT_IN_MAIN_Y * 1.5))
 
         target_sprite = Target()
 
@@ -171,7 +172,7 @@ def main():
 
         if game.bothWent():
             redrawWindow(window, game, player)
-            pygame.time.delay(500)
+            pygame.time.delay(5000)
             try:
                 game = n.send("reset")
                 points_missed = 0
@@ -204,20 +205,23 @@ def main():
                 pos = pygame.mouse.get_pos()
 
                 for target in targets:
-                    if target.click(pos) and game.connected():
+                    if target.click(pos):
                         late_counter_seconds = 0
                         targets.remove(target)
                         points_hit += 1
                         print("You have hit:", points_hit, "times")
-                        if player == 0:
-                            if not game.p1Went and general_counter_seconds > 10:
-                                n.send(str(points_hit))
-                        else:
-                            if not game.p2Went and general_counter_seconds > 10:
-                                n.send(str(points_hit))
-                    if target.click(pos) is False and game.connected():
+                    if target.click(pos) is False:
                         points_missed += 1
                         print("You have missed:", points_missed, "times")
+
+        if general_counter_seconds >= PLAY_TIME:
+            if player == 0:
+                # If false (turn has not passed)... send data
+                if not game.p1Went:
+                    n.send(str(points_hit))
+            else:
+                if not game.p2Went:
+                    n.send(str(points_hit))
 
         if frame_counter % FPS == 0:
             late_counter_seconds += 1
@@ -226,7 +230,7 @@ def main():
                 for target in targets:
                     targets.remove(target)
                     points_late += 1
-                    print("Too Late...\n", "You have missed:", points_late, "times")
+                    print("Too Late...\n", "You were late", points_late, "times")
         redrawWindow(window, game, player)
 
 
