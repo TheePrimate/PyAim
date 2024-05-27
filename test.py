@@ -73,7 +73,7 @@ targets = []
 def redrawWindow(window, game, p):
     window.fill(BACKGROUND_COLOUR)
 
-    if not(game.connected()):
+    if not game.connected():
         font = pygame.font.SysFont("Times No Roman", 80)
         text = font.render("Waiting for Another Client to Connect...", 1, (255,0,0))
         window.blit(text, (WIDTH/2 - text.get_width() / 2, HEIGHT/2 - text.get_height() / 2))
@@ -86,21 +86,23 @@ def redrawWindow(window, game, p):
         text = font.render("Opponents", 1, (0, 255, 255))
         window.blit(text, (TEXT_IN_MAIN_X2 - text.get_width() / 2, TEXT_IN_MAIN_Y))
 
-        move1 = game.get_player_move(0)
-        move2 = game.get_player_move(1)
+        hits1 = game.get_player_hit(0)
+        hits2 = game.get_player_hit(1)
+        miss1 = game.get_player_miss(0)
+        miss2 = game.get_player_miss(1)
         if game.bothWent():
-            text1 = font.render(move1, 1, (0, 0, 0))
-            text2 = font.render(move2, 1, (0, 0, 0))
+            text1 = font.render(hits1, 1, (0, 0, 0))
+            text2 = font.render(hits, 1, (0, 0, 0))
         else:
             if game.p1Went and p == 0:
-                text1 = font.render(f"Hit: {move1} times", 1, (0, 0, 0))
+                text1 = font.render(f"Hit: {hits} times", 1, (0, 0, 0))
             elif game.p1Went:
                 text1 = font.render("Locked In", 1, (0, 0, 0))
             else:
                 text1 = font.render("Waiting...", 1, (0, 0, 0))
 
             if game.p2Went and p == 1:
-                text2 = font.render(f"Hit: {move2} times", 1, (0, 0, 0))
+                text2 = font.render(f"Hit: {hits} times", 1, (0, 0, 0))
             elif game.p2Went:
                 text2 = font.render("Locked In", 1, (0, 0, 0))
             else:
@@ -131,7 +133,7 @@ def menu_screen():
         clock.tick(FPS)
         window.fill(MENU_COLOUR)
         font = pygame.font.SysFont("Times New Roman", 60)
-        text = font.render("Click to Play!", 1, (255,0,0))
+        text = font.render("Click to Play!", 1, (255, 0, 0))
         window.blit(text, (WIDTH / 2 - text.get_width()/2, HEIGHT / 2 - HEIGHT / 4))
         start_sprite.draw(window)
         pygame.display.update()
@@ -185,7 +187,7 @@ def main():
                 break
 
             font = pygame.font.SysFont("Times New Roman", 90)
-            if (game.winner() == 1 and player == 1) or (game.winner() == 0 and player == 0):
+            if (game.winner() == 0 and player == 0) or (game.winner() == 1 and player == 1):
                 text = font.render("You Won!", 1, (255, 0, 0))
             elif game.winner() == -1:
                 text = font.render("Tie Game!", 1, (255, 0, 0))

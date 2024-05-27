@@ -4,19 +4,28 @@ class Game:
         self.p2Went = False
         self.ready = False
         self.id = id
-        self.moves = [None, None]
+        self.hits = [None, None]
         self.wins = [0,0]
         self.ties = 0
 
-    def get_player_move(self, p):
+    def get_player_hit(self, p):
         """
         :param p: [0,1]
         :return: Move
         """
-        return self.moves[p]
+        return self.hits[p]
 
-    def play(self, player, move):
-        self.moves[player] = move
+    # asdasd
+    def get_player_miss(self, p):
+        """
+        :param p: [0,1]
+        :return: Move
+        """
+        return self.misses[p]
+
+    def play(self, player, hit):
+        self.hits[player] = hit
+        self.misses[player] = miss
         if player == 0:
             self.p1Went = True
         else:
@@ -30,8 +39,8 @@ class Game:
 
     def winner(self):
 
-        p1 = int(self.moves[0])
-        p2 = int(self.moves[1])
+        p1 = int(self.hits[0])
+        p2 = int(self.hits[1])
 
         if p1 > p2:
             winner = 0
