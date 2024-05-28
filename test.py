@@ -75,6 +75,7 @@ targets = []
 
 def redrawWindow(window, game, p):
     window.fill(BACKGROUND_COLOUR)
+    target_sprite = Target()
 
     if not(game.connected()):
         font = pygame.font.SysFont("Times No Roman", 80)
@@ -89,21 +90,21 @@ def redrawWindow(window, game, p):
         text = font.render("Opponents", 1, (0, 255, 255))
         window.blit(text, (TEXT_IN_MAIN_X2 - text.get_width() / 2, TEXT_IN_MAIN_Y))
 
-        move1 = game.get_player_move(0)
-        move2 = game.get_player_move(1)
+        score1 = game.get_player_score(0)
+        score2 = game.get_player_score(1)
         if game.bothWent():
-            text1 = font.render(move1, 1, (0, 0, 0))
-            text2 = font.render(move2, 1, (0, 0, 0))
+            text1 = font.render(score1, 1, (0, 0, 0))
+            text2 = font.render(score2, 1, (0, 0, 0))
         else:
             if game.p1Went and p == 0:
-                text1 = font.render(f"Hit: {move1} times", 1, (0, 0, 0))
+                text1 = font.render(f"Hit: {score1} times", 1, (0, 0, 0))
             elif game.p1Went:
                 text1 = font.render("Locked In", 1, (0, 0, 0))
             else:
                 text1 = font.render("Waiting...", 1, (0, 0, 0))
 
             if game.p2Went and p == 1:
-                text2 = font.render(f"Hit: {move2} times", 1, (0, 0, 0))
+                text2 = font.render(f"Hit: {score2} times", 1, (0, 0, 0))
             elif game.p2Went:
                 text2 = font.render("Locked In", 1, (0, 0, 0))
             else:
@@ -115,8 +116,6 @@ def redrawWindow(window, game, p):
         if p == 1:
             window.blit(text2, (TEXT_IN_MAIN_X1 - text.get_width() / 2, TEXT_IN_MAIN_Y * 1.5))
             window.blit(text1, (TEXT_IN_MAIN_X2 - text.get_width() / 2, TEXT_IN_MAIN_Y * 1.5))
-
-        target_sprite = Target()
 
         if len(targets) < 1:
             targets.append(target_sprite)
