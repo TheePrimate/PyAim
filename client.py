@@ -16,7 +16,6 @@ from constants import MISS_VALUE
 from constants import LATE_VALUE
 pygame.font.init()
 
-
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Client")
 
@@ -94,29 +93,29 @@ def redrawWindow(window, game, p):
         score1 = game.get_player_score(0)
         score2 = game.get_player_score(1)
         if game.bothWent():
-            text1 = font.render(score1, 1, (0, 0, 0))
-            text2 = font.render(score2, 1, (0, 0, 0))
+            text1 = font.render(f"Score: {score1}", 1, (0, 0, 0))
+            text2 = font.render(f"Score: {score2}", 1, (0, 0, 0))
         else:
             if game.p1Went and p == 0:
-                text1 = font.render(f"Hit: {score1} times", 1, (0, 0, 0))
+                text1 = font.render(f"Score: {score1}", 1, (0, 0, 0))
             elif game.p1Went:
                 text1 = font.render("Locked In", 1, (0, 0, 0))
             else:
                 text1 = font.render("Waiting...", 1, (0, 0, 0))
 
             if game.p2Went and p == 1:
-                text2 = font.render(f"Hit: {score2} times", 1, (0, 0, 0))
+                text2 = font.render(f"Score: {score2}", 1, (0, 0, 0))
             elif game.p2Went:
                 text2 = font.render("Locked In", 1, (0, 0, 0))
             else:
                 text2 = font.render("Waiting...", 1, (0, 0, 0))
 
         if p == 0:
-            window.blit(text1, (TEXT_IN_MAIN_X1 - text.get_width() / 2, TEXT_IN_MAIN_Y * 1.5))
-            window.blit(text2, (TEXT_IN_MAIN_X2 - text.get_width() / 2, TEXT_IN_MAIN_Y * 1.5))
+            window.blit(text1, (TEXT_IN_MAIN_X1 - text.get_width() / 2, TEXT_IN_MAIN_Y * 2))
+            window.blit(text2, (TEXT_IN_MAIN_X2 - text.get_width() / 2, TEXT_IN_MAIN_Y * 2))
         if p == 1:
-            window.blit(text2, (TEXT_IN_MAIN_X1 - text.get_width() / 2, TEXT_IN_MAIN_Y * 1.5))
-            window.blit(text1, (TEXT_IN_MAIN_X2 - text.get_width() / 2, TEXT_IN_MAIN_Y * 1.5))
+            window.blit(text2, (TEXT_IN_MAIN_X1 - text.get_width() / 2, TEXT_IN_MAIN_Y * 2))
+            window.blit(text1, (TEXT_IN_MAIN_X2 - text.get_width() / 2, TEXT_IN_MAIN_Y * 2))
 
         if len(targets) < 1:
             targets.append(target_sprite)
@@ -162,11 +161,14 @@ def main():
     points_hit = 0
     points_missed = 0
     points_late = 0
-    score = 0
+    pygame.mouse.set_visible(True)
+    crosshair = pygame.image.load("Pyaim_crosshair.png")
+    crosshair_img_rect = crosshair.get_rect()
 
     while run:
         clock.tick(FPS)
         frame_counter += 1
+
         try:
             game = n.send("get")
         except:
@@ -176,7 +178,7 @@ def main():
 
         if game.bothWent():
             redrawWindow(window, game, player)
-            pygame.time.delay(5000)
+            pygame.time.delay(500)
             try:
                 game = n.send("reset")
                 points_missed = 0
@@ -236,6 +238,9 @@ def main():
             else:
                 if not game.p2Went:
                     n.send(str(score))
+        crosshair_img_rect.center = pygame.mouse.get_pos()
+        window.blit(crosshair, crosshair_img_rect)
+        pygame.display.update()
         redrawWindow(window, game, player)
 
 
