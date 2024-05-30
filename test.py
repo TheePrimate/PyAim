@@ -162,15 +162,15 @@ def main():
     points_hit = 0
     points_missed = 0
     points_late = 0
-    pygame.mouse.set_visible(True)
+    pygame.mouse.set_visible(False)
     crosshair = pygame.image.load("Pyaim_crosshair.png")
-    cursor_img_rect = crosshair.get_rect()
+    crosshair_img_rect = crosshair.get_rect()
 
     while run:
         clock.tick(FPS)
         frame_counter += 1
-        cursor_img_rect.center = pygame.mouse.get_pos()
-        window.blit(crosshair, cursor_img_rect)
+        crosshair_img_rect.center = pygame.mouse.get_pos()
+        window.blit(crosshair, crosshair_img_rect)
         try:
             game = n.send("get")
         except:
@@ -199,9 +199,8 @@ def main():
                 text = font.render("Tie Game!", 1, (255, 0, 0))
             else:
                 text = font.render("You Lost...", 1, (255, 0, 0))
-
-            window.blit(text, (WIDTH/2 - text.get_width()/2, HEIGHT/2 - text.get_height()/2))
             pygame.display.update()
+            window.blit(text, (WIDTH/2 - text.get_width()/2, HEIGHT/2 - text.get_height()/2))
             pygame.time.delay(2000)
 
         for event in pygame.event.get():
