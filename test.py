@@ -1,5 +1,4 @@
 import pygame
-import os
 from network import Network
 import pickle
 import random
@@ -162,15 +161,14 @@ def main():
     points_hit = 0
     points_missed = 0
     points_late = 0
-    pygame.mouse.set_visible(False)
+    pygame.mouse.set_visible(True)
     crosshair = pygame.image.load("Pyaim_crosshair.png")
     crosshair_img_rect = crosshair.get_rect()
 
     while run:
         clock.tick(FPS)
         frame_counter += 1
-        crosshair_img_rect.center = pygame.mouse.get_pos()
-        window.blit(crosshair, crosshair_img_rect)
+
         try:
             game = n.send("get")
         except:
@@ -199,8 +197,9 @@ def main():
                 text = font.render("Tie Game!", 1, (255, 0, 0))
             else:
                 text = font.render("You Lost...", 1, (255, 0, 0))
-            pygame.display.update()
+
             window.blit(text, (WIDTH/2 - text.get_width()/2, HEIGHT/2 - text.get_height()/2))
+            pygame.display.update()
             pygame.time.delay(2000)
 
         for event in pygame.event.get():
@@ -239,6 +238,9 @@ def main():
             else:
                 if not game.p2Went:
                     n.send(str(score))
+        crosshair_img_rect.center = pygame.mouse.get_pos()
+        window.blit(crosshair, crosshair_img_rect)
+        pygame.display.update()
         redrawWindow(window, game, player)
 
 
