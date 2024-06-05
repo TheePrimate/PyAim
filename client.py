@@ -1,6 +1,5 @@
 import pygame
 from network import Network
-import pickle
 import random
 from constants import WIDTH
 from constants import HEIGHT
