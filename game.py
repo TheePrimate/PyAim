@@ -5,8 +5,6 @@ class Game:
         self.ready = False
         self.id = id
         self.scores = [None, None]
-        self.wins = [0, 0]
-        self.ties = 0
 
     def get_player_score(self, p):
         """

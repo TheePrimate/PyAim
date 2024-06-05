@@ -99,14 +99,14 @@ def redrawWindow(window, game, p):
             if game.p1Went and p == 0:
                 text1 = font.render(f"Score: {score1}", 1, (0, 0, 0))
             elif game.p1Went:
-                text1 = font.render("Locked In", 1, (0, 0, 0))
+                text1 = font.render("Done", 1, (0, 0, 0))
             else:
                 text1 = font.render("Waiting...", 1, (0, 0, 0))
 
             if game.p2Went and p == 1:
                 text2 = font.render(f"Score: {score2}", 1, (0, 0, 0))
             elif game.p2Went:
-                text2 = font.render("Locked In", 1, (0, 0, 0))
+                text2 = font.render("Done", 1, (0, 0, 0))
             else:
                 text2 = font.render("Waiting...", 1, (0, 0, 0))
 
@@ -240,8 +240,8 @@ def main():
                     n.send(str(score))
         crosshair_img_rect.center = pygame.mouse.get_pos()
         window.blit(crosshair, crosshair_img_rect)
-        pygame.display.update()
         redrawWindow(window, game, player)
+        pygame.display.update()
 
 
 while True:
