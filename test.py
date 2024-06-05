@@ -71,10 +71,15 @@ class Button:
 
 targets = []
 
+crosshair = pygame.image.load("Pyaim_crosshair.png")
+crosshair_img_rect = crosshair.get_rect()
 
-def redrawWindow(window, game, p):
+def redrawWindow(window, game, p, mouse_pos):
     window.fill(BACKGROUND_COLOUR)
+
     target_sprite = Target()
+    crosshair_img_rect.center = mouse_pos
+    window.blit(crosshair, crosshair_img_rect)
 
     if not(game.connected()):
         font = pygame.font.SysFont("Times No Roman", 80)
@@ -160,14 +165,13 @@ def main():
     points_hit = 0
     points_missed = 0
     points_late = 0
-    pygame.mouse.set_visible(True)
-    crosshair = pygame.image.load("Pyaim_crosshair.png")
-    crosshair_img_rect = crosshair.get_rect()
+    pygame.mouse.set_visible(False)
+
 
     while run:
         clock.tick(FPS)
         frame_counter += 1
-
+        mouse_pos = pygame.mouse.get_pos()
         try:
             game = n.send("get")
         except:
@@ -176,7 +180,7 @@ def main():
             break
 
         if game.bothWent():
-            redrawWindow(window, game, player)
+            redrawWindow(window, game, player, mouse_pos)
             pygame.time.delay(500)
             try:
                 game = n.send("reset")
@@ -237,10 +241,8 @@ def main():
             else:
                 if not game.p2Went:
                     n.send(str(score))
-        crosshair_img_rect.center = pygame.mouse.get_pos()
-        window.blit(crosshair, crosshair_img_rect)
-        redrawWindow(window, game, player)
-        pygame.display.update()
+
+        redrawWindow(window, game, player, mouse_pos)
 
 
 while True:
