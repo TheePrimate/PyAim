@@ -1,6 +1,6 @@
 import pygame
-from network import Network
 import random
+from network import Network
 from constants import WIDTH
 from constants import HEIGHT
 from constants import FPS
@@ -15,6 +15,7 @@ from constants import MISS_VALUE
 from constants import LATE_VALUE
 pygame.font.init()
 
+# Set window to
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Test Client")
 
@@ -25,7 +26,7 @@ class Target:
         self.radius = 50
         self.x = random.randint(self.radius + int(self.radius / 2), WIDTH - self.radius)
         self.y = random.randint(self.radius + int(self.radius / 2), HEIGHT - self.radius)
-        self.color = (random.randint(0,255), random.randint(0, 255), random.randint(0, 255))
+        self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
     def draw(self, window):
         pygame.draw.circle(window, self.color, (self.x,self.y), self.radius)
@@ -78,8 +79,7 @@ def redrawWindow(window, game, p, mouse_pos):
     window.fill(BACKGROUND_COLOUR)
 
     target_sprite = Target()
-    crosshair_img_rect.center = mouse_pos
-    window.blit(crosshair, crosshair_img_rect)
+
 
     if not(game.connected()):
         font = pygame.font.SysFont("Times No Roman", 80)
@@ -125,6 +125,8 @@ def redrawWindow(window, game, p, mouse_pos):
             targets.append(target_sprite)
         for target in targets:
             target.draw(window)
+        crosshair_img_rect.center = mouse_pos
+        window.blit(crosshair, crosshair_img_rect)
 
     pygame.display.update()
 
