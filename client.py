@@ -194,7 +194,7 @@ def main():
                 points_hit = 0
                 points_late = 0
                 general_counter_seconds = 0
-            except:
+            except OSError:
                 print("Couldn't get game")
                 break
 
