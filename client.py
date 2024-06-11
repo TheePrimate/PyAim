@@ -168,6 +168,9 @@ def menu_screen():
     run = True
     clock = pygame.time.Clock()
     start_sprite = Button()
+    # In case the other client disconnects and player
+    # is returned to menu screen, set mouse visible again.
+    pygame.mouse.set_visible(True)
     while run:
         # Make the menu screen run at the designated tick rate.
         clock.tick(FPS)
@@ -198,18 +201,21 @@ def main():
     frame_counter = 0
     general_counter_seconds = 0
     late_counter_seconds = 0
-    points_hit = 0
-    points_missed = 0
-    points_late = 0
+    times_hit = 0
+    times_missed = 0
+    times_late = 0
     pygame.mouse.set_visible(False)
 
     while run:
         clock.tick(FPS)
         frame_counter += 1
         mouse_pos = pygame.mouse.get_pos()
+        # Try to get score, if no score is found, this is skipped.
         try:
             game = n.send("get")
-        except OSError:
+        # In the encounter of an EOFError
+        # (connection to other client lost) stop the code.
+        except EOFError:
             print("Connection lost...")
             break
 
@@ -218,11 +224,11 @@ def main():
             pygame.time.delay(500)
             try:
                 game = n.send("reset")
-                points_missed = 0
-                points_hit = 0
-                points_late = 0
+                times_missed = 0
+                times_hit = 0
+                times_late = 0
                 general_counter_seconds = 0
-            except OSError:
+            except EOFError:
                 print("Connection lost...")
                 break
 
@@ -253,36 +259,51 @@ def main():
                     # If successful hit on a target, remove that target...
                     # Another will be drawn in the reDraw window.
                     if target.click(pos):
-                        # Counts how many seconds that the current target has existed for.
+                        # Resets the timer that counts how many seconds
+                        # the current target has existed for.
                         late_counter_seconds = 0
+                        # Remove the current target after successful hit.
                         targets.remove(target)
-                        points_hit += 1
-                        print("You have hit:", points_hit, "times")
+                        # Counts how many times player successfully hits.
+                        times_hit += 1
+                        print("You have hit:", times_hit, "times")
+                    # Counts how many times player misses.
                     if target.click(pos) is False:
-                        points_missed += 1
-                        print("You have missed:", points_missed, "times")
+                        times_missed += 1
+                        print("You have missed:", times_missed, "times")
 
+        # Converts the predetermined tick rate to seconds.
         if frame_counter % FPS == 0:
-            late_counter_seconds += 1
+            # Keeps track of time on seconds.
             general_counter_seconds += 1
+            # Counts how many seconds that the current target has existed for.
+            late_counter_seconds += 1
+            # If the current target has existed for two seconds,
+            # remove it and add one to how many times player was late.
             if late_counter_seconds % 2 == 0:
                 for target in targets:
                     targets.remove(target)
-                    points_late += 1
-                    print("Too Late...\n", "You were late", points_late, "times")
+                    times_late += 1
+                    print("Too Late...\n", "You were late", times_late, "times")
 
+        # If
         if general_counter_seconds >= PLAY_TIME:
-            score = HIT_VALUE * points_hit + MISS_VALUE * points_missed + LATE_VALUE * points_late
+            # Calculate score
+            score = HIT_VALUE * times_hit + MISS_VALUE * times_missed + LATE_VALUE * times_late
             if player == 0:
-                # If false (turn has not passed)... send data
+                # If you are player 1, and you haven't
+                # submitted a score yet, send score
                 if not game.p1Went:
                     n.send(str(score))
             else:
+                # If you are player 2, and you haven't
+                # submitted a score yet, send score
                 if not game.p2Went:
                     n.send(str(score))
 
         redrawWindow(window, game, player, mouse_pos)
 
 
+# Automatically start the game on the menu screen
 while True:
     menu_screen()
