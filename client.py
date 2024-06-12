@@ -95,7 +95,7 @@ crosshair = pygame.image.load(Crosshair)
 crosshair_img_rect = crosshair.get_rect()
 
 
-def redrawWindow(drawing_surface, game, p, mouse_pos):
+def redraw(drawing_surface, game, p, mouse_pos):
     drawing_surface.fill(BACKGROUND_COLOUR)
     target_sprite = Target()
 
@@ -118,24 +118,24 @@ def redrawWindow(drawing_surface, game, p, mouse_pos):
         score1 = game.get_player_score(0)
         score2 = game.get_player_score(1)
         # If both players submitted their scores, assign those scores into variables
-        if game.bothWent():
+        if game.both_submitted():
             text1 = font.render(f"Score: {score1}", 1, (0, 0, 0))
             text2 = font.render(f"Score: {score2}", 1, (0, 0, 0))
         else:
             # If player 1 is done, and you are player 1, display your score.
-            if game.p1Went and p == 0:
+            if game.p1Submit and p == 0:
                 text1 = font.render(f"Score: {score1}", 1, (0, 0, 0))
             # If player 1 is done, and you are player 2, display that player 1 is done.
-            elif game.p1Went:
+            elif game.p1Submit:
                 text1 = font.render("Done", 1, (0, 0, 0))
             # If no one is done, display waiting.
             else:
                 text1 = font.render("Waiting...", 1, (0, 0, 0))
 
             # Same as before, but for the perspective of player 2.
-            if game.p2Went and p == 1:
+            if game.p2Submit and p == 1:
                 text2 = font.render(f"Score: {score2}", 1, (0, 0, 0))
-            elif game.p2Went:
+            elif game.p2Submit:
                 text2 = font.render("Done", 1, (0, 0, 0))
             else:
                 text2 = font.render("Waiting...", 1, (0, 0, 0))
@@ -196,7 +196,7 @@ def main():
     run = True
     clock = pygame.time.Clock()
     n = Network()
-    player = int(n.getP())
+    player = int(n.get_player_id())
     print("You are Player", player + 1)
     frame_counter = 0
     general_counter_seconds = 0
@@ -219,8 +219,8 @@ def main():
             print("Connection lost...")
             break
 
-        if game.bothWent():
-            redrawWindow(window, game, player, mouse_pos)
+        if game.both_submitted():
+            redraw(window, game, player, mouse_pos)
             pygame.time.delay(500)
             try:
                 game = n.send("reset")
@@ -293,15 +293,15 @@ def main():
             if player == 0:
                 # If you are player 1, and you haven't
                 # submitted a score yet, send score
-                if not game.p1Went:
+                if not game.p1Submit:
                     n.send(str(score))
             else:
                 # If you are player 2, and you haven't
                 # submitted a score yet, send score
-                if not game.p2Went:
+                if not game.p2Submit:
                     n.send(str(score))
 
-        redrawWindow(window, game, player, mouse_pos)
+        redraw(window, game, player, mouse_pos)
 
 
 # Automatically start the game on the menu screen

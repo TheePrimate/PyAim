@@ -1,7 +1,7 @@
 class Game:
     def __init__(self, id):
-        self.p1Went = False
-        self.p2Went = False
+        self.p1Submit = False
+        self.p2Submit = False
         self.ready = False
         self.id = id
         self.scores = [None, None]
@@ -13,33 +13,36 @@ class Game:
         """
         return self.scores[p]
 
-    def play(self, player, score):
+    def submitted(self, player, score):
         self.scores[player] = score
         if player == 0:
-            self.p1Went = True
+            self.p1Submit = True
         else:
-            self.p2Went = True
+            self.p2Submit = True
 
     def connected(self):
         return self.ready
 
-    def bothWent(self):
-        return self.p1Went and self.p2Went
+    def both_submitted(self):
+        return self.p1Submit and self.p2Submit
 
     def winner(self):
 
         p1 = int(self.scores[0])
         p2 = int(self.scores[1])
 
+        # If player 1's score is higher, they win.
         if p1 > p2:
             winner = 0
         elif p1 < p2:
             winner = 1
+        # If they have the same score, tie.
         else:
             winner = -1
 
         return winner
 
-    def resetWent(self):
-        self.p1Went = False
-        self.p2Went = False
+    # When called,
+    def reset_submits(self):
+        self.p1Submit = False
+        self.p2Submit = False

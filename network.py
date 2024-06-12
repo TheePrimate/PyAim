@@ -12,19 +12,21 @@ class Network:
         self.address = (self.server, self.port)
         self.p = self.connect()
 
-    def getP(self):
+    def get_player_id(self):
         return self.p
 
+    # Connect client to the address and
+    # send data to confirm connection.
     def connect(self):
         try:
             self.client.connect(self.address)
             return self.client.recv(2048).decode()
-        except:
+        except EOFError:
             pass
 
     def send(self, data):
         try:
             self.client.send(str.encode(data))
-            return pickle.loads(self.client.recv(2048*2))
+            return pickle.loads(self.client.recv(2048 * 2))
         except socket.error as e:
             print(e)
