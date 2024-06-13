@@ -16,6 +16,7 @@ MENU_BACKGROUND_COLOUR = (31, 207, 107)
 GAME_BACKGROUND_COLOUR = (57, 50, 166)
 # How long each game takes in seconds.
 PLAY_TIME = 10
+# Impact on score per point of:
 HIT_VALUE = 1000
 MISS_VALUE = -200
 LATE_VALUE = -500
