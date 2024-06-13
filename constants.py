@@ -1,6 +1,6 @@
 # Replace the server with whatever
 # your IPv4 Address is on the server.
-SERVER_IP = "172.23.4.31"
+SERVER_IP = "INSERT ADDRESS"
 # Most commonly free-to-use port.
 PORT = 5555
 # Tick rate of game.
