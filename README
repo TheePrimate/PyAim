@@ -12,8 +12,7 @@ Instructions:
 2. Run the server file to start accepting communication from clients.
 3. Run the clients.
 4. Have fun!
-NOTE: Each player needs the client file, the game file, the constants file 
-and the network file to play. 
+NOTE: Only one client needs to run the server file.
 
 Resources Used:
 https://youtube.com/playlist?list=PLzMcBGfZo4-kR7Rh-7JCVDN8lm3Utumvq&si=_yvHagJWrCaVIyRd
