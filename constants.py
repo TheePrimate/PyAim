@@ -14,7 +14,7 @@ TEXT_IN_MAIN_X2 = WIDTH * 0.75
 TEXT_IN_MAIN_Y = HEIGHT * 0.1
 MENU_BACKGROUND_COLOUR = (31, 207, 107)
 GAME_BACKGROUND_COLOUR = (57, 50, 166)
-# How long each game takes in seconds
+# How long each game takes in seconds.
 PLAY_TIME = 10
 HIT_VALUE = 1000
 MISS_VALUE = -200

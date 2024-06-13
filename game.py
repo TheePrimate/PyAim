@@ -42,7 +42,7 @@ class Game:
 
         return winner
 
-    # When called,
+    # Used to restart the game.
     def reset_submits(self):
         self.p1Submit = False
         self.p2Submit = False

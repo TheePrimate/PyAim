@@ -16,28 +16,28 @@ from constants import LATE_VALUE
 from constants import CROSSHAIR
 pygame.font.init()
 
-# Set window to width and height with constants
+# Set window to width and height with constants.
 window = pygame.display.set_mode((WIDTH, HEIGHT))
-# Names the window as "Client"
+# Names the window as "Client".
 pygame.display.set_caption("Client")
 
 
 # Make a class named target, which will be responsible for drawing each target
-# and responsible for if the player has successfully hit the target or not
+# and responsible for if the player has successfully hit the target or not.
 class Target:
     def __init__(self):
-        # Display text "Hit Me!" within each target
+        # Display text "Hit Me!" within each target.
         self.text = "Hit Me!"
         self.radius = 50
         self.x = random.randint(self.radius + int(self.radius / 2), WIDTH - self.radius)
         self.y = random.randint(self.radius + int(self.radius / 2), HEIGHT - self.radius)
-        # Make each target a random colour each time it spawns
+        # Make each target a random colour each time it spawns.
         self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
     def draw(self, drawing_surface):
         # Draw a circle at the designated screen, with the information from the __init__ function.
         pygame.draw.circle(drawing_surface, self.color, (self.x, self.y), self.radius)
-        # Define what font type to use and the size
+        # Define what font type to use and the size.
         font = pygame.font.SysFont("Times New Roman", 20)
         # Assign the text that needs to be displayed with
         # the font information, with anti-alias and the given colour.
@@ -47,7 +47,7 @@ class Target:
         drawing_surface.blit(text, (self.x - round(self.radius / 20) - round(text.get_width() / 2),
                                     self.y - round(self.radius/20) - round(text.get_height()/2)))
 
-    # If the mouse click position is within the circle, return True
+    # If the mouse click position is within the circle, return True.
     # The math uses Pythagorean Theorem to calculate if the hypotenuse (distance from
     # mouse click position to circle) is less than, equal to, or greater than the radius.
     # If the calculated hypotenuse is smaller or equal to the radius of the circle, the target is hit.
@@ -60,7 +60,7 @@ class Target:
             return False
 
 
-# Class for the start game button
+# Class for the start game button.
 class Button:
     def __init__(self):
         self.text = "Start"
@@ -89,9 +89,9 @@ class Button:
 
 
 targets = []
-# Load the image of the crosshair and assign it to a variable
+# Load the image of the crosshair and assign it to a variable.
 crosshair = pygame.image.load(CROSSHAIR)
-# Make the crosshair an object which can interact with the game
+# Make the crosshair an object which can interact with the game.
 crosshair_img_rect = crosshair.get_rect()
 
 
@@ -117,7 +117,7 @@ def redraw(drawing_surface, game, p, mouse_pos):
         # Get the other client's player score from the Game.py file.
         score1 = game.get_player_score(0)
         score2 = game.get_player_score(1)
-        # If both players submitted their scores, assign those scores into variables
+        # If both players submitted their scores, assign those scores into variables.
         if game.both_submitted():
             text1 = font.render(f"Score: {score1}", 1, (0, 0, 0))
             text2 = font.render(f"Score: {score2}", 1, (0, 0, 0))
@@ -192,7 +192,7 @@ def menu_screen():
     main()
 
 
-# Main game loop
+# Main game loop.
 def main():
     run = True
     clock = pygame.time.Clock()
@@ -289,22 +289,22 @@ def main():
 
         # If
         if general_counter_seconds >= PLAY_TIME:
-            # Calculate score
+            # Calculate score.
             score = HIT_VALUE * times_hit + MISS_VALUE * times_missed + LATE_VALUE * times_late
             if player == 0:
                 # If you are player 1, and you haven't
-                # submitted a score yet, send score
+                # submitted a score yet, send score.
                 if not game.p1Submit:
                     n.send(str(score))
             else:
                 # If you are player 2, and you haven't
-                # submitted a score yet, send score
+                # submitted a score yet, send score.
                 if not game.p2Submit:
                     n.send(str(score))
 
         redraw(window, game, player, mouse_pos)
 
 
-# Automatically start the game on the menu screen
+# Automatically start the game on the menu screen.
 while True:
     menu_screen()
