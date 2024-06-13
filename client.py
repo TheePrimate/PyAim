@@ -4,8 +4,8 @@ from network import Network
 from constants import WIDTH
 from constants import HEIGHT
 from constants import FPS
-from constants import BACKGROUND_COLOUR
-from constants import MENU_COLOUR
+from constants import GAME_BACKGROUND_COLOUR
+from constants import MENU_BACKGROUND_COLOUR
 from constants import TEXT_IN_MAIN_X1
 from constants import TEXT_IN_MAIN_X2
 from constants import TEXT_IN_MAIN_Y
@@ -13,7 +13,7 @@ from constants import PLAY_TIME
 from constants import HIT_VALUE
 from constants import MISS_VALUE
 from constants import LATE_VALUE
-from constants import Crosshair
+from constants import CROSSHAIR
 pygame.font.init()
 
 # Set window to width and height with constants
@@ -90,13 +90,13 @@ class Button:
 
 targets = []
 # Load the image of the crosshair and assign it to a variable
-crosshair = pygame.image.load(Crosshair)
+crosshair = pygame.image.load(CROSSHAIR)
 # Make the crosshair an object which can interact with the game
 crosshair_img_rect = crosshair.get_rect()
 
 
 def redraw(drawing_surface, game, p, mouse_pos):
-    drawing_surface.fill(BACKGROUND_COLOUR)
+    drawing_surface.fill(GAME_BACKGROUND_COLOUR)
     target_sprite = Target()
 
     # While the game is not connected, display a waiting for another player screen.
@@ -174,9 +174,9 @@ def menu_screen():
     while run:
         # Make the menu screen run at the designated tick rate.
         clock.tick(FPS)
-        window.fill(MENU_COLOUR)
+        window.fill(MENU_BACKGROUND_COLOUR)
         font = pygame.font.SysFont("Times New Roman", 60)
-        text = font.render("Click to Play!", 1, (255, 0, 0))
+        text = font.render("Click to Play!", 1, (0, 0, 0))
         window.blit(text, (WIDTH / 2 - text.get_width()/2, HEIGHT / 2 - HEIGHT / 4))
         start_sprite.draw(window)
         pygame.display.update()
@@ -192,6 +192,7 @@ def menu_screen():
     main()
 
 
+# Main game loop
 def main():
     run = True
     clock = pygame.time.Clock()
@@ -235,11 +236,11 @@ def main():
             font = pygame.font.SysFont("Times New Roman", 90)
             # If this client is the player than won, display that you won.
             if (game.winner() == 1 and player == 1) or (game.winner() == 0 and player == 0):
-                text = font.render("You Won!", 1, (255, 0, 0))
+                text = font.render("You Won!", 1, (15, 214, 35))
             elif game.winner() == -1:
-                text = font.render("Tie Game!", 1, (255, 0, 0))
+                text = font.render("Tie Game!", 1, (255, 247, 0))
             else:
-                text = font.render("You Lost...", 1, (255, 0, 0))
+                text = font.render("You Lost...", 1, (227, 18, 18))
 
             window.blit(text, (WIDTH/2 - text.get_width()/2, HEIGHT/2 - text.get_height()/2))
             pygame.display.update()

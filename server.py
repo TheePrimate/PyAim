@@ -49,14 +49,14 @@ def threaded_client(connection, player, game_id):
                     connection.sendall(pickle.dumps(game))
             else:
                 break
-        except EOFError:
+        except KeyError:
             break
 
     print("Lost connection")
     try:
         del games[game_id]
         print("Closing Game", game_id)
-    except EOFError:
+    except KeyError:
         pass
     idCount -= 1
     connection.close()
