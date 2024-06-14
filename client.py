@@ -88,6 +88,7 @@ class Button:
             return False
 
 
+# Just a list that holds the target object to be able to draw and erase the target.
 targets = []
 # Load the image of the crosshair and assign it to a variable.
 crosshair = pygame.image.load(CROSSHAIR)
@@ -287,9 +288,10 @@ def main():
                     times_late += 1
                     print("Too Late...\n", "You were late", times_late, "times")
 
-        # If
+        # If the time is equal to or more than the time limit of the game.
         if general_counter_seconds >= PLAY_TIME:
-            # Calculate score.
+            # Calculate score, any other inputs after the limit
+            # won't be excepted in the score.
             score = HIT_VALUE * times_hit + MISS_VALUE * times_missed + LATE_VALUE * times_late
             if player == 0:
                 # If you are player 1, and you haven't
