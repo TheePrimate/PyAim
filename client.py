@@ -1,3 +1,8 @@
+"""
+File responsible for drawing and detection of targets.
+"""
+
+
 import pygame
 import random
 from network import Network
@@ -15,6 +20,7 @@ from constants import MISS_VALUE
 from constants import LATE_VALUE
 from constants import CROSSHAIR
 pygame.font.init()
+
 
 # Set window to width and height with constants.
 window = pygame.display.set_mode((WIDTH, HEIGHT))

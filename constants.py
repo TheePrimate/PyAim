@@ -1,3 +1,7 @@
+"""
+File for constants.
+"""
+
 # Replace the server with whatever
 # your IPv4 Address is on the server.
 SERVER_IP = ""

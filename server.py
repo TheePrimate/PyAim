@@ -1,3 +1,7 @@
+"""
+File for sending and receiving data between the two clients.
+"""
+
 import socket
 from _thread import *
 import pickle

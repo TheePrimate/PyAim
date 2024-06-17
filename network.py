@@ -1,3 +1,8 @@
+"""
+File for compiling information and sending it to the server.
+"""
+
+
 import socket
 import pickle
 from constants import SERVER_IP
@@ -13,18 +18,24 @@ class Network:
         self.p = self.connect()
 
     def get_player_id(self):
+        """Get the player's ID"""
         return self.p
 
-    # Connect client to the address and
-    # send data to confirm connection.
     def connect(self):
+        """
+        Connect client to the address and
+        send data to confirm connection.
+        """
         try:
             self.client.connect(self.address)
             return self.client.recv(2048).decode()
+        # "End of File" Error occurs when there is
+        # expected information, but nothing is received/sent.
         except EOFError:
             pass
 
     def send(self, data):
+        """Function that compiles code and then sends it"""
         try:
             self.client.send(str.encode(data))
             return pickle.loads(self.client.recv(2048 * 2))
